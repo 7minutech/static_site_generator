@@ -31,11 +31,4 @@ class LeafNode(HTMLNode):
         if self.tag is None:
             return self.value
         else:
-            opening_tag = f"<{self.tag}"
-            closing_tag = f"</{self.tag}>"
-            if self.props is not None and self.props:
-                opening_tag += " "
-                attrs = [f"{key}=\"{value}\"" for key, value in self.props.items()]
-                opening_tag += " ".join(attrs)
-            opening_tag += ">"
-            return f"{opening_tag}{self.value}{closing_tag}"
+            return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
