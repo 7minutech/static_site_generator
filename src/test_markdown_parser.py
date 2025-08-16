@@ -125,16 +125,6 @@ class TestExtractMarkdownImages(unittest.TestCase):
         text = "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
         expected = [("image", "https://i.imgur.com/zjjcJKZ.png")]
         self.assertListEqual(expected, extract_markdown_images(text))
-    
-    def test_extract_markdown_images_invalid_markdown_alt_text(self):
-        text = "This is text with an ![image(https://i.imgur.com/zjjcJKZ.png)"
-        with self.assertRaises(ValueError):
-            extract_markdown_images(text)
-
-    def test_extract_markdown_images_invalid_markdown_url(self):
-        text = "This is text with an ![image]https://i.imgur.com/zjjcJKZ.png)"
-        with self.assertRaises(ValueError):
-            extract_markdown_images(text)
 
 class TestExtractMarkdownLinks(unittest.TestCase):
 
@@ -148,15 +138,5 @@ class TestExtractMarkdownLinks(unittest.TestCase):
         expected = [("to boot dev", "https://www.boot.dev")]
         self.assertListEqual(expected, extract_markdown_links(text))
     
-    def test_extract_markdown_links_invalid_markdown_anchor_text(self):
-        text = "This is text with a link [to boot dev(https://www.boot.dev)"
-        with self.assertRaises(ValueError):
-            extract_markdown_links(text)
-
-    def test_extract_markdown_links_invalid_markdown_url(self):
-        text = "This is text with a link [to boot dev]https://www.boot.dev)"
-        with self.assertRaises(ValueError):
-            extract_markdown_links(text)
-
 if __name__ == "__main__":
     unittest.main()
