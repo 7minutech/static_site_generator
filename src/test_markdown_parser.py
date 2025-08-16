@@ -55,6 +55,10 @@ class TestTextNode(unittest.TestCase):
             TextNode(".", TextType.TEXT),
             ])
     
+    def test_delimiter_empty_list(self):
+        new_nodes = split_nodes_delimiter([], "_", TextType.ITALIC)
+        self.assertEqual(new_nodes, [])
+    
     def test_delimiter_no_hit(self):
         node = TextNode("This is a normal word word.", TextType.TEXT)
         new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC)
@@ -103,7 +107,13 @@ class TestTextNode(unittest.TestCase):
             TextNode("bold word", TextType.BOLD),
             TextNode("This is text with without a code block word", TextType.TEXT),
             ])
+    
+    # --- Tests for split_nodes_delimiter invalid markdown ---
 
+    def test_delimiter_invalid_markdown(self):
+        node = TextNode("This text is _italic", TextType.TEXT)
+        with self.assertRaises(ValueError):
+            split_nodes_delimiter([node], "_", TextType.ITALIC)
 
 if __name__ == "__main__":
     unittest.main()
