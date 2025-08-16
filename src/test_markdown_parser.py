@@ -123,8 +123,8 @@ class TestExtractMarkdownImages(unittest.TestCase):
     
     def test_extract_markdown_images_one(self):
         text = "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
-        expected = extract_markdown_images(text)
-        self.assertListEqual(expected, [("image", "https://i.imgur.com/zjjcJKZ.png")])
+        expected = [("image", "https://i.imgur.com/zjjcJKZ.png")]
+        self.assertListEqual(expected, extract_markdown_images(text))
     
     def test_extract_markdown_images_invalid_markdown_alt_text(self):
         text = "This is text with an ![image(https://i.imgur.com/zjjcJKZ.png)"
@@ -145,8 +145,8 @@ class TestExtractMarkdownLinks(unittest.TestCase):
     
     def test_extract_markdown_links_one(self):
         text = "This is text with a link [to boot dev](https://www.boot.dev)"
-        expected = extract_markdown_links(text)
-        self.assertListEqual(expected, [("to boot dev", "https://www.boot.dev")])
+        expected = [("to boot dev", "https://www.boot.dev")]
+        self.assertListEqual(expected, extract_markdown_links(text))
     
     def test_extract_markdown_links_invalid_markdown_anchor_text(self):
         text = "This is text with a link [to boot dev(https://www.boot.dev)"
