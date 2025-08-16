@@ -4,8 +4,7 @@ from markdown_parser import split_nodes_delimiter
 from textnode import TextNode, TextType
 
 
-class TestTextNode(unittest.TestCase):
-
+class TestSplitNodesDelimiter(unittest.TestCase):
     # --- Tests for split_nodes_delimiter CODE, BOLD, and ITALIC ---
     
     def test_delimiter_with_code(self):
