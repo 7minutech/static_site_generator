@@ -1,6 +1,6 @@
 import unittest
 
-from markdown_parser import split_nodes_delimiter, extract_markdown_images
+from markdown_parser import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 from textnode import TextNode, TextType
 
 
@@ -136,6 +136,27 @@ class TestExtractMarkdownImages(unittest.TestCase):
         with self.assertRaises(ValueError):
             extract_markdown_images(text)
 
+class TestExtractMarkdownLinks(unittest.TestCase):
+
+    def test_extract_markdown_links_many(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        expected = [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
+        self.assertListEqual(expected, extract_markdown_links(text))
+    
+    def test_extract_markdown_links_one(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev)"
+        expected = extract_markdown_links(text)
+        self.assertListEqual(expected, [("to boot dev", "https://www.boot.dev")])
+    
+    def test_extract_markdown_links_invalid_markdown_anchor_text(self):
+        text = "This is text with a link [to boot dev(https://www.boot.dev)"
+        with self.assertRaises(ValueError):
+            extract_markdown_links(text)
+
+    def test_extract_markdown_links_invalid_markdown_url(self):
+        text = "This is text with a link [to boot dev]https://www.boot.dev)"
+        with self.assertRaises(ValueError):
+            extract_markdown_links(text)
 
 if __name__ == "__main__":
     unittest.main()

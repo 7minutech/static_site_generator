@@ -26,3 +26,13 @@ def extract_markdown_images(text):
     for i in range(len(alt_texts)):
         matches.append((alt_texts[i], srcs[i]))
     return matches
+
+def extract_markdown_links(text):
+    matches = []
+    anchor_texts = re.findall(r"\[(.*?)\]", text)
+    hrefs = re.findall(r"\((.*?)\)", text)
+    if len(anchor_texts) != len(hrefs):
+        raise ValueError("Invalid markdown")
+    for i in range(len(anchor_texts)):
+        matches.append((anchor_texts[i], hrefs[i]))
+    return matches
