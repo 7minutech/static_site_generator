@@ -1,6 +1,6 @@
 import unittest
 
-from markdown_parser import split_nodes_delimiter
+from markdown_parser import split_nodes_delimiter, extract_markdown_images
 from textnode import TextNode, TextType
 
 
@@ -113,6 +113,29 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         node = TextNode("This text is _italic", TextType.TEXT)
         with self.assertRaises(ValueError):
             split_nodes_delimiter([node], "_", TextType.ITALIC)
+
+class TestExtractMarkdownImages(unittest.TestCase):
+
+    def test_extract_markdown_images_many(self):
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        expected = [("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")]
+        self.assertListEqual(expected, extract_markdown_images(text))
+    
+    def test_extract_markdown_images_one(self):
+        text = "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+        expected = extract_markdown_images(text)
+        self.assertListEqual(expected, [("image", "https://i.imgur.com/zjjcJKZ.png")])
+    
+    def test_extract_markdown_images_invalid_markdown_alt_text(self):
+        text = "This is text with an ![image(https://i.imgur.com/zjjcJKZ.png)"
+        with self.assertRaises(ValueError):
+            extract_markdown_images(text)
+
+    def test_extract_markdown_images_invalid_markdown_url(self):
+        text = "This is text with an ![image]https://i.imgur.com/zjjcJKZ.png)"
+        with self.assertRaises(ValueError):
+            extract_markdown_images(text)
+
 
 if __name__ == "__main__":
     unittest.main()
