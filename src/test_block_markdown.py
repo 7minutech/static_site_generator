@@ -286,9 +286,41 @@ This is another paragraph with _italic_ text and `code` here
 
         node = markdown_to_html_node(md)
         html = node.to_html()
-        print(html)
         self.assertEqual(
             html,
             "<div><h1>Heading 1</h1><p>This is <b>bolded</b> paragraph text in a p tag here</p><h2>Heading 2</h2>"
             "<p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
+    
+    def test_ul(self):
+        md = """
+
+- This is **bolded** bullet
+- This is _italic_ bullet
+- This is `code` bullet
+
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ul><li>This is <b>bolded</b> bullet</li><li>This is <i>italic</i> bullet</li><li>This is <code>code</code> bullet</li></ul></div>"
+        )
+
+    def test_ol(self):
+        md = """
+
+1. This is **bolded** first bullet
+2. This is _italic_ second bullet
+3. This is `code` third bullet
+
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ol><li>This is <b>bolded</b> first bullet</li><li>This is <i>italic</i> second bullet</li>"
+            "<li>This is <code>code</code> third bullet</li></ol></div>"
         )

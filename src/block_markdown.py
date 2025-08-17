@@ -60,9 +60,26 @@ def markdown_to_html_node(markdown):
             pre_node = ParentNode("pre", [code_block])
             div_children.append(pre_node)
         elif block_type == BlockType.UNORDERED_LIST:
-            pass
+            list_items = block.split("\n")
+            ul_children = []
+            for li in list_items:
+                li_children = []
+                text_nodes = text_to_textnodes(li[2:])
+                for text_node in text_nodes:
+                    li_children.append(text_node_to_html_node(text_node))
+                ul_children.append(ParentNode("li", li_children))
+            div_children.append(ParentNode("ul", ul_children))
+
         elif block_type == BlockType.ORDERED_LIST:
-            pass
+            list_items = block.split("\n")
+            ol_children = []
+            for li in list_items:
+                li_children = []
+                text_nodes = text_to_textnodes(li[3:])
+                for text_node in text_nodes:
+                    li_children.append(text_node_to_html_node(text_node))
+                ol_children.append(ParentNode("li", li_children))
+            div_children.append(ParentNode("ol", ol_children))
         else:
             text_nodes = text_to_textnodes(text)
             children = []
@@ -80,10 +97,6 @@ def block_to_text_value(block, block_type):
             return block[3:-3].lstrip()
         case BlockType.QUOTE:
             return block[2:]
-        case BlockType.UNORDERED_LIST:
-            return block[2:]
-        case BlockType.ORDERED_LIST:
-            return block[3:]
         case BlockType.PARAGRAPH:
             return block.replace("\n", " ")
 
@@ -105,3 +118,13 @@ def block_to_tag(block, block_type):
             return "ol"
 
         
+md = """
+
+- This is **bolded** bullet
+- This is _italic_ bullet
+- This is `code`bullet
+
+"""
+
+node = markdown_to_html_node(md)
+html = node.to_html()
