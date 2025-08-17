@@ -54,16 +54,19 @@ def markdown_to_html_node(markdown):
     for block in blocks:
         block_type = block_to_block_type(block)
         tag = block_to_tag(block, block_type)
-        text_nodes = text_to_textnodes(block)
-        children = []
-        for text_node in text_nodes:
-            print(text_node)
-            children.append(text_node_to_html_node(text_node))
-        div_children.append(ParentNode(tag, children))
+        if block_type == BlockType.CODE:
+            text = block[3:-3].lstrip()
+            code_block = LeafNode(tag, text)
+            pre_node = ParentNode("pre", [code_block])
+            div_children.append(pre_node)
+        else:
+            text_nodes = text_to_textnodes(block.replace("\n", " "))
+            children = []
+            for text_node in text_nodes:
+                children.append(text_node_to_html_node(text_node))
+            div_children.append(ParentNode(tag, children))
     return ParentNode("div", div_children)
         
-
-
 def block_to_tag(block, block_type):
     match block_type:
         case BlockType.HEADING:
@@ -80,3 +83,13 @@ def block_to_tag(block, block_type):
         case BlockType.ORDERED_LIST:
             return "ol"
         
+md = """
+```
+This is text that _should_ remain
+the **same** even with inline stuff
+```
+"""
+
+node = markdown_to_html_node(md)
+html = node.to_html()
+print(html)
