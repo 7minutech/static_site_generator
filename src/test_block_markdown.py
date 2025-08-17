@@ -1,5 +1,5 @@
 import unittest
-from block_markdown import markdown_to_blocks
+from block_markdown import *
 
 class Test_MarkdownToBlocks(unittest.TestCase):
 
@@ -83,3 +83,73 @@ This is a _footer_
                 "This is a _footer_",
             ],
         )
+
+class TestBlockToBlockType(unittest.TestCase):
+
+    # --- Tests for block_to_block_type with headings 1-6 ---
+
+    def test_block_to_block_type_heading1(self):
+        h1_block = "# H1"
+        self.assertEqual(block_to_block_type(h1_block), BlockType.HEADING)
+    
+    def test_block_to_block_type_heading2(self):
+        h2_block = "## H2"
+        self.assertEqual(block_to_block_type(h2_block), BlockType.HEADING)
+
+    def test_block_to_block_type_heading3(self):
+        h3_block = "### H3"
+        self.assertEqual(block_to_block_type(h3_block), BlockType.HEADING)
+
+    def test_block_to_block_type_heading4(self):
+        h4_block = "#### H4"
+        self.assertEqual(block_to_block_type(h4_block), BlockType.HEADING)
+
+    def test_block_to_block_type_heading5(self):
+        h5_block = "##### H5"
+        self.assertEqual(block_to_block_type(h5_block), BlockType.HEADING)
+
+    def test_block_to_block_type_heading6(self):
+        h6_block = "###### H6"
+        self.assertEqual(block_to_block_type(h6_block), BlockType.HEADING) 
+
+    # --- Tests for block_to_block_type for code ---       
+
+    def test_block_to_block_type_code(self):
+        code_block = "```Ths is some code```"
+        self.assertEqual(block_to_block_type(code_block), BlockType.CODE) 
+    
+    def test_block_to_block_type_code_mutli_line(self):
+        code_block = "```python\ndef my_function():\n   print(\"Hello\")\n    return 42\n```"
+        self.assertEqual(block_to_block_type(code_block), BlockType.CODE) 
+    
+    def test_block_to_block_type_missing_end_code(self):
+        code_block = "```Ths is some code"
+        self.assertNotEqual(block_to_block_type(code_block), BlockType.CODE) 
+    
+    def test_block_to_block_type_missing_start_code(self):
+        code_block = "Ths is some code```"
+        self.assertNotEqual(block_to_block_type(code_block), BlockType.CODE) 
+    
+    # --- Tests for block_to_block_type for quotes --- 
+
+    def test_block_to_block_type_qoute(self):
+        code_block = "> Ths is a quote block"
+        self.assertEqual(block_to_block_type(code_block), BlockType.QUOTE) 
+    
+    # --- Tests for block_to_block_type for ul --- 
+
+    def test_block_to_block_type_ul(self):
+        ul_block = "- bullet 1\n- bullet 2\n- bullet 3"
+        self.assertEqual(block_to_block_type(ul_block), BlockType.UNORDERED_LIST) 
+    
+    # --- Tests for block_to_block_type for ol --- 
+
+    def test_block_to_block_type_ol(self):
+        ol_block = "1. first\n2. second\n3. third"
+        self.assertEqual(block_to_block_type(ol_block), BlockType.ORDERED_LIST) 
+    
+    # --- Tests for block_to_block_type for paragraph --- 
+
+    def test_block_to_block_type_paragraph(self):
+        paragraph_block = "This is normal text"
+        self.assertEqual(block_to_block_type(paragraph_block), BlockType.PARAGRAPH) 
