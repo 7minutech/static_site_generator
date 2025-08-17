@@ -84,6 +84,30 @@ This is a _footer_
             ],
         )
 
+    def test_markdown_to_blocks_start_end_newline(self):
+        md = (
+"""
+
+This is **bolded** paragraph
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+- This is a list
+- with items
+
+"""
+        )
+        blocks = markdown_to_blocks(md)
+        self.assertListEqual(
+            blocks, 
+            [
+                "This is **bolded** paragraph",
+                "This is another paragraph with _italic_ text and `code` here\nThis is the same paragraph on a new line",
+                "- This is a list\n- with items",
+            ],
+        )
+
 class TestBlockToBlockType(unittest.TestCase):
 
     # --- Tests for block_to_block_type with headings 1-6 ---
@@ -153,3 +177,44 @@ class TestBlockToBlockType(unittest.TestCase):
     def test_block_to_block_type_paragraph(self):
         paragraph_block = "This is normal text"
         self.assertEqual(block_to_block_type(paragraph_block), BlockType.PARAGRAPH) 
+        
+
+class TestmMrkdownToHtmlNode(unittest.TestCase):
+    
+    # --- Test for helper method block_to_tag ---
+
+    def test_block_to_tag_headings(self):
+        heading_blocks = ["# H1", "## H2","### H3","#### H4","##### H5","###### H6",] 
+        tags = []
+        for heading_block in heading_blocks:
+            tags.append(block_to_tag(heading_block, block_to_block_type(heading_block)))
+        self.assertListEqual(["h1","h2","h3","h4","h5","h6"], tags)
+    
+    def test_block_to_tag_paragraph(self):
+        paragraph_block = "This is normal text"
+        tag = block_to_tag(paragraph_block, block_to_block_type(paragraph_block))
+        self.assertEqual("p", tag)
+    
+    def test_block_to_tag_code(self):
+        paragraph_block = "```This is text is code```"
+        tag = block_to_tag(paragraph_block, block_to_block_type(paragraph_block))
+        self.assertEqual("code", tag)
+    
+    def test_block_to_tag_quote(self):
+        paragraph_block = "> This is a quote"
+        tag = block_to_tag(paragraph_block, block_to_block_type(paragraph_block))
+        self.assertEqual("blockquote", tag)
+    
+    def test_block_to_tag_ul(self):
+        paragraph_block = "- Bullet one\n- Bullet two\n- Bullet three"
+        tag = block_to_tag(paragraph_block, block_to_block_type(paragraph_block))
+        self.assertEqual("ul", tag)
+    
+    def test_block_to_tag_ol(self):
+        paragraph_block = "1. Point one\n2. Point two\n3. Point three"
+        tag = block_to_tag(paragraph_block, block_to_block_type(paragraph_block))
+        self.assertEqual("ol", tag)
+    
+    # --- Test markdown_to_html_node ---
+    
+    
