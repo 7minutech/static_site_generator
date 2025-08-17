@@ -1,6 +1,6 @@
 import unittest
 
-from markdown_parser import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes
+from inline_markdown_parser import *
 from textnode import TextNode, TextType
 
 
