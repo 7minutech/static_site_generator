@@ -338,3 +338,46 @@ This is another paragraph with _italic_ text and `code` here
             html,
             "<div><blockquote>This is a block quote with both <b>bold</b> and <i>italic</i></blockquote></div>"
         )
+    
+    def test_block_multi_lines(self):
+        md = """
+
+# This is an h1 heading
+
+Here is the _first_ paragraph
+with some really **interesting**
+text and now it ends
+
+## Here is some code
+
+```def main() print("Hello")```
+
+### Here are some bullets
+
+- Best in town
+- Best around
+- Best sound
+
+#### Here are some numbered list
+
+1. First point.
+2. Second point.
+3. Third point.
+
+##### Last note
+
+This is the end of the page.
+
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><h1>This is an h1 heading</h1><p>Here is the <i>first</i> paragraph with some really <b>interesting</b> text and now it ends</p>"
+            "<h2>Here is some code</h2><pre><code>def main() print(\"Hello\")</code></pre><h3>Here are some bullets</h3>"
+            "<ul><li>Best in town</li><li>Best around</li><li>Best sound</li></ul>"
+            "<h4>Here are some numbered list</h4><ol><li>First point.</li><li>Second point.</li><li>Third point.</li></ol>"
+            "<h5>Last note</h5><p>This is the end of the page.</p></div>"
+        )
+    
