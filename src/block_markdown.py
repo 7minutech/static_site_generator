@@ -59,6 +59,10 @@ def markdown_to_html_node(markdown):
             code_block = LeafNode(tag, text)
             pre_node = ParentNode("pre", [code_block])
             div_children.append(pre_node)
+        elif block_type == BlockType.UNORDERED_LIST:
+            pass
+        elif block_type == BlockType.ORDERED_LIST:
+            pass
         else:
             text_nodes = text_to_textnodes(text)
             children = []
