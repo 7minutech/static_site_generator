@@ -324,3 +324,17 @@ This is another paragraph with _italic_ text and `code` here
             "<div><ol><li>This is <b>bolded</b> first bullet</li><li>This is <i>italic</i> second bullet</li>"
             "<li>This is <code>code</code> third bullet</li></ol></div>"
         )
+    
+    def test_block_quote(self):
+        md = """
+
+> This is a block quote with both **bold** and _italic_
+
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><blockquote>This is a block quote with both <b>bold</b> and <i>italic</i></blockquote></div>"
+        )

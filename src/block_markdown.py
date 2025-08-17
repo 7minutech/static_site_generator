@@ -116,15 +116,3 @@ def block_to_tag(block, block_type):
             return "ul"
         case BlockType.ORDERED_LIST:
             return "ol"
-
-        
-md = """
-
-- This is **bolded** bullet
-- This is _italic_ bullet
-- This is `code`bullet
-
-"""
-
-node = markdown_to_html_node(md)
-html = node.to_html()
