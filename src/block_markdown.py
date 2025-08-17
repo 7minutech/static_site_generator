@@ -1,6 +1,7 @@
 from enum import Enum
 from htmlnode import *
 from inline_markdown_parser import *
+from textnode import *
 
 
 class BlockType(Enum):
@@ -49,11 +50,17 @@ def block_to_block_type(block):
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
+    div_children = []
     for block in blocks:
         block_type = block_to_block_type(block)
         tag = block_to_tag(block, block_type)
-        html_node = HTMLNode(tag)
         text_nodes = text_to_textnodes(block)
+        children = []
+        for text_node in text_nodes:
+            print(text_node)
+            children.append(text_node_to_html_node(text_node))
+        div_children.append(ParentNode(tag, children))
+    return ParentNode("div", div_children)
         
 
 
@@ -73,16 +80,3 @@ def block_to_tag(block, block_type):
         case BlockType.ORDERED_LIST:
             return "ol"
         
-
-# md = """
-# This is **bolded** paragraph
-# text in a p
-# tag here
-
-# This is another paragraph with _italic_ text and `code` here
-
-# """
-
-# node = markdown_to_html_node(md)
-# html = node.to_html()
-# print(html)
