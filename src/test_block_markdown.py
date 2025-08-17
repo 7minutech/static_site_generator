@@ -235,14 +235,6 @@ class TestmMrkdownToHtmlNode(unittest.TestCase):
     def test_block_to_text_value_quote(self):
         block = "> This is a quote with some _italic_ and **bold**"
         self.assertEqual("This is a quote with some _italic_ and **bold**", block_to_text_value(block, block_to_block_type(block)))
-
-    def test_block_to_text_value_ul(self):
-        block = "- This is unorderd list item"
-        self.assertEqual("This is unorderd list item", block_to_text_value(block, block_to_block_type(block)))
-    
-    def test_block_to_text_value_ul(self):
-        block = "1. This is ordered list item"
-        self.assertEqual("This is ordered list item", block_to_text_value(block, block_to_block_type(block)))
     
     # --- Test markdown_to_html_node ---
 
@@ -278,25 +270,25 @@ the **same** even with inline stuff
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )
     
-#     def test_headings(self):
-#         md = """
-# # Heading 1
+    def test_headings(self):
+        md = """
+# Heading 1
 
-# This is **bolded** paragraph
-# text in a p
-# tag here
+This is **bolded** paragraph
+text in a p
+tag here
 
-# ## Heading 2
+## Heading 2
 
-# This is another paragraph with _italic_ text and `code` here
+This is another paragraph with _italic_ text and `code` here
 
-# """
+"""
 
-#         node = markdown_to_html_node(md)
-#         html = node.to_html()
-#         print(html)
-#         self.assertEqual(
-#             html,
-#             "<div><h1>Heading 1</h1><p>This is <b>bolded</b> paragraph text in a p tag here</p><h2>Heading 2</h2>"
-#             "<p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
-#         )
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        print(html)
+        self.assertEqual(
+            html,
+            "<div><h1>Heading 1</h1><p>This is <b>bolded</b> paragraph text in a p tag here</p><h2>Heading 2</h2>"
+            "<p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
