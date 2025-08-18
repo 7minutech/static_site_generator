@@ -116,3 +116,10 @@ def block_to_tag(block, block_type):
             return "ul"
         case BlockType.ORDERED_LIST:
             return "ol"
+
+def extract_title(markdown):
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        if block_to_tag(block, block_to_block_type(block)) == "h1":
+            return block_to_text_value(block, block_to_block_type(block))
+    raise ValueError("markdown must have a h1 header")

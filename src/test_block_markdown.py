@@ -380,4 +380,38 @@ This is the end of the page.
             "<h4>Here are some numbered list</h4><ol><li>First point.</li><li>Second point.</li><li>Third point.</li></ol>"
             "<h5>Last note</h5><p>This is the end of the page.</p></div>"
         )
+
+class TestExtractTitle(unittest.TestCase):
+
+    def test_extract_title_basic(self):
+        actual = extract_title("# Hello")
+        self.assertEqual("Hello", actual)
     
+    def test_extract_title_multi_line(self):
+        md = """
+
+# This is **bolded** paragraph
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+- This is a list
+- with items
+
+"""
+        actual = extract_title(md)
+        self.assertEqual("This is **bolded** paragraph", actual)
+
+    def test_extract_title_heading_in_middle(self):
+        md = """
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+# This is **bolded** paragraph
+
+- This is a list
+- with items
+
+"""
+        actual = extract_title(md)
+        self.assertEqual("This is **bolded** paragraph", actual)    
