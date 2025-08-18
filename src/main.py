@@ -4,7 +4,7 @@ import os, shutil
 
 def main():
     copy_to_destination("static", "public")
-    generate_page("contents/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
 
 def copy_to_destination(source_path, destination_path):
     if os.path.isdir(source_path) and os.path.isdir(destination_path):
@@ -27,7 +27,7 @@ def copy_dir_contents(dir_path, destination):
             shutil.copy(item_path, destination)
 
 def generate_page(from_path, template_path, dest_path):
-    print("Generating page from from_path to dest_path using template_path")
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     try:
         markdown_contents = ""
         template_contents = ""
@@ -48,6 +48,18 @@ def generate_page(from_path, template_path, dest_path):
         print(f"file: {from_path} was not found: {fe}")
     except Exception as e:
         print(f"error occured: {e}")
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    source_dir_contents = os.listdir(dir_path_content)
+    for item in source_dir_contents:
+        item_path = os.path.join(dir_path_content, item)
+        if os.path.isdir(item_path):
+            new_dir_path = os.path.join(dest_dir_path, item)
+            generate_pages_recursive(item_path, template_path, new_dir_path)
+        else:
+            md_file_path = os.path.join(dest_dir_path, item)
+            html_file_path = os.path.splitext(md_file_path)[0] + ".html"
+            generate_page(item_path, template_path, html_file_path)
 
 
 
