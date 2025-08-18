@@ -96,7 +96,9 @@ def block_to_text_value(block, block_type):
         case BlockType.CODE:
             return block[3:-3].lstrip()
         case BlockType.QUOTE:
-            return block[2:]
+            return "<br>".join(
+        [line.lstrip("> ").rstrip() for line in block.split("\n")]
+    )
         case BlockType.PARAGRAPH:
             return block.replace("\n", " ")
 
@@ -123,3 +125,16 @@ def extract_title(markdown):
         if block_to_tag(block, block_to_block_type(block)) == "h1":
             return block_to_text_value(block, block_to_block_type(block))
     raise ValueError("markdown must have a h1 header")
+
+
+md = """
+
+> "I am in fact a Hobbit in all but size."
+>
+> -- J.R.R. Tolkien
+
+"""
+
+node = markdown_to_html_node(md)
+html = node.to_html()
+print(html)

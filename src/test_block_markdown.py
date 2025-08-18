@@ -339,6 +339,22 @@ This is another paragraph with _italic_ text and `code` here
             "<div><blockquote>This is a block quote with both <b>bold</b> and <i>italic</i></blockquote></div>"
         )
     
+    def test_block_quote_multi_line(self):
+        md = """
+
+> "I am in fact a Hobbit in all but size."
+>
+> -- J.R.R. Tolkien
+
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><blockquote>\"I am in fact a Hobbit in all but size.\"<br><br>-- J.R.R. Tolkien</blockquote></div>"
+        )
+    
     def test_block_multi_lines(self):
         md = """
 
