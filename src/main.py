@@ -1,9 +1,10 @@
 from textnode import TextNode, TextType
+from block_markdown import markdown_to_html_node, extract_title
 import os, shutil
 
 def main():
-    node = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
     copy_to_destination("static", "public")
+    generate_page("contents/index.md", "template.html", "public/index.html")
 
 def copy_to_destination(source_path, destination_path):
     if os.path.isdir(source_path) and os.path.isdir(destination_path):
@@ -24,6 +25,30 @@ def copy_dir_contents(dir_path, destination):
         else:
             print(f"copying {item_path} to {destination}")
             shutil.copy(item_path, destination)
+
+def generate_page(from_path, template_path, dest_path):
+    print("Generating page from from_path to dest_path using template_path")
+    try:
+        markdown_contents = ""
+        template_contents = ""
+        with open(from_path) as markdown:
+            markdown_contents = markdown.read()
+        with open(template_path) as html_template:
+            template_contents = html_template.read()
+        html_str = markdown_to_html_node(markdown_contents).to_html()
+        title_of_page = extract_title(markdown_contents)
+        template_contents = template_contents.replace("{{ Title }}", title_of_page)
+        template_contents = template_contents.replace("{{ Content }}", html_str)
+        if not os.path.exists(os.path.join(os.getcwd(), os.path.dirname(dest_path))):
+            os.makedirs(os.path.join(os.getcwd(), os.path.dirname(dest_path)))
+        with open(dest_path, "w") as html_file:
+            html_file.write(template_contents)
+            
+    except FileNotFoundError as fe:
+        print(f"file: {from_path} was not found: {fe}")
+    except Exception as e:
+        print(f"error occured: {e}")
+
 
 
 main()
